@@ -9,4 +9,5 @@ package assignment1;
  */
 public class Person5 {
 
+	private String name;
 }
