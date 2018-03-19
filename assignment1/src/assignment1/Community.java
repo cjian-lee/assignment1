@@ -139,5 +139,22 @@ public class Community {
         person.setStatus(sc.next());
         System.out.println("Status update successful!");
     }
+    
+    private Person selectPerson(){
+        listEveryone();
+        System.out.println("Input person's name for further manipulation:");
+        boolean flag = false;
+        while(!flag){
+            String personName = sc.next();
+            for(int i = 0; i < personList.size(); i++){
+                if(personList.get(i).getName().equals(personName)){
+                    flag = true;
+                    System.out.println(personList.get(i).getName() + " has been selected.");
+                    return personList.get(i);
+                }
+            }
+            System.out.println("Cannot find " + personName + ". Please try again: ");
+        }return null;
+    }
 
 }
