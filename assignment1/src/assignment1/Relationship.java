@@ -30,13 +30,6 @@ public class Relationship {
         this.type = type;
     }
 
-    //    public void addFriend() {
-//    	list.add(person);
-//    }
-//
-    public void removeFriend() {
-        list.remove(person);
-    }
 
 
 }
