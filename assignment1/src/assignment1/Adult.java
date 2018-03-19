@@ -40,6 +40,8 @@ public class Adult extends Person{
     public void setDependent(Dependent dependent) {
         this.dependent = dependent;
     }
+  
+}
 
 
     
