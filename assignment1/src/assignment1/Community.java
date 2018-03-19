@@ -48,6 +48,8 @@ public class Community {
                 case "4":
                     removePerson();
                     break;
+                case "5":
+                    directFriend();
                 case "0":
                     flag = true;
                     break;
@@ -234,6 +236,44 @@ public class Community {
             }
         }else{
             System.out.println("Invalid Input or out of age range");
+        }
+    }
+    
+    
+    private void directFriend(){
+        if(personList.size() == 0){
+            System.out.println("=============================");
+            System.out.println("|There's no one in community|");
+            System.out.println("|Try to add two people first|");
+            System.out.println("=============================");
+        }else if(personList.size() == 1){
+            System.out.println("=============================");
+            System.out.println("|Only one person in community|");
+            System.out.println("|Try to add another first    |");
+            System.out.println("=============================");
+        }else{
+            listEveryone();
+            String firstName, secondName;
+            do {
+                System.out.println("Input first person's name:");
+                firstName = sc.next();
+                System.out.println("Input second person's name:");
+                secondName = sc.next();
+                if(findPerson(firstName) == null){
+                    System.out.println("Cannot find first person, please try again.");
+                }
+                if(findPerson(secondName) == null){
+                    System.out.println("Cannot find second person, please try again.");
+                }
+            }while(findPerson(firstName) == null || findPerson(secondName) == null);
+            Person firstPerson = findPerson(firstName);
+            Person secondPerson = findPerson(secondName);
+            if(firstPerson.withRelationship(secondPerson)){
+                System.out.println(firstName + " is " + firstPerson.getRelationship().get(firstPerson.relatedIndex(secondPerson)).getType()
+                                    + " of " + secondName);
+            }else{
+                System.out.println(firstName + " is not in relationship with " + secondName);
+            }
         }
     }
 
