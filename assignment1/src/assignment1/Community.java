@@ -15,4 +15,8 @@ public class Community {
 	public void getPerson(Person a) {
 		System.out.println();
 	}
+	
+	public void getPerson(Person a) {
+		System.out.println();
+	}
 }
