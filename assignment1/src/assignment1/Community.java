@@ -71,5 +71,39 @@ public class Community {
         }
         System.out.println("===========================");
     }
+    
+    private void updateSelected(Person person){
+
+        boolean flag = false;
+        do {
+            System.out.println("________________________________________________________________");
+            System.out.println("Input following number for further manipulations on " + person.getName());
+            System.out.println("1  ->  Print Profile");
+            System.out.println("2  ->  Add Relationship");
+            System.out.println("3  ->  Update Name");
+            System.out.println("4  ->  Update Age");
+            System.out.println("5  ->  Update Gender");
+            System.out.println("6  ->  Update Status");
+            System.out.println("0  ->  Return to Main Menu");
+            System.out.println("_________________________________________________________________");
+            System.out.println("Please input your choice:");
+            String choice = sc.next();
+            if (choice.equals("1")) {
+                person.printProfile();
+            } else if (choice.equals("2")) {
+                addRelationship(person);
+            } else if (choice.equals("3")) {
+                updateName(person);
+            } else if (choice.equals("4")) {
+                updateAge(person);
+            } else if (choice.equals("5")) {
+                updateGender(person);
+            } else if (choice.equals("6")) {
+                updateStatus(person);
+            } else if (choice.equals("0")){
+                flag = true;
+            }
+        }while(!flag);
+    }
 
 }
