@@ -40,6 +40,12 @@ public class Adult extends Person{
     public void setDependent(Dependent dependent) {
         this.dependent = dependent;
     }
+
+	@Override
+	public void printProfile() {
+		// TODO Auto-generated method stub
+		
+	}
   
 }
 
