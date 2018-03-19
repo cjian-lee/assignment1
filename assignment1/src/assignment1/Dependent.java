@@ -18,29 +18,29 @@ public class Dependent extends Person{
 //        adult2.addDependent(adult1, this);
 //        this.hasParent = true;
 //    }
+//need to be fixed
+    public void addRelationship(String type, Dependent dependent){
+        if (withinRange(dependent)){
+            if(withRelationship(dependent)){
+                System.out.println(getName() + " and " + dependent.getName() + " are already in relationship");
+            }else{
+                getRelationship().add(new Relationship(type, dependent));
+                dependent.getRelationship().add(new Relationship(type, this));
+            }
+        }else{
+            System.out.println("Out of age range.");
+        }
+    }
 
-//    public void addRelationship(String type, Dependent dependent){
-//        if (withinRange(dependent)){
-//            if(withRelationship(dependent)){
-//                System.out.println(getName() + " and " + dependent.getName() + " are already in relationship");
-//            }else{
-//                getRelationship().add(new Relationship(type, dependent));
-//                dependent.getRelationship().add(new Relationship(type, this));
-//            }
-//        }else{
-//            System.out.println("Out of age range.");
-//        }
-//    }
-//
-//    private boolean withinRange(Dependent dependent){
-//        if(dependent.getAge() > 2 && dependent.getAge() < 16){
-//            if(Math.abs(dependent.getAge()- getAge()) >= 3){
-//                return true;
-//            }else{
-//                return false;
-//            }
-//        }return false;
-//    }
+    private boolean withinRange(Dependent dependent){
+        if(dependent.getAge() > 2 && dependent.getAge() < 16){
+            if(Math.abs(dependent.getAge()- getAge()) >= 3){
+                return true;
+            }else{
+                return false;
+            }
+        }return false;
+    }
 
     public void addRelationship(String type, Person person){
         if (withinRange(person)){
