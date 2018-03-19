@@ -105,5 +105,39 @@ public class Community {
             }
         }while(!flag);
     }
+    
+    private void updateName(Person person){
+        System.out.println("Input new name:");
+        person.setName(sc.next());
+        System.out.println("Name update successful!");
+    }
+
+    private void updateAge(Person person){
+        System.out.println("Input new age:");
+        int newAge = sc.nextInt();
+        sc.nextLine();
+        if(person.getAge() < 16 && newAge >= 16){
+            System.out.println("Cannot change child to adult");
+            System.out.println("Age update not successful.");
+        }else if(person.getAge() >= 16 && newAge < 16){
+            System.out.println("Cannot change adult to child");
+            System.out.println("Age update not successful.");
+        }else{
+            person.setAge(newAge);
+            System.out.println("Age update successfully!");
+        }
+    }
+
+    private void updateGender(Person person){
+        System.out.println("Input new gender:");
+        person.setGender(sc.next());
+        System.out.println("Gender update successful!");
+    }
+
+    private void updateStatus(Person person){
+        System.out.println("Input new status:");
+        person.setStatus(sc.next());
+        System.out.println("Status update successful!");
+    }
 
 }
