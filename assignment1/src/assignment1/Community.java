@@ -276,5 +276,54 @@ public class Community {
             }
         }
     }
+    //potential infinite loop, validation need to be added later on
+    private void removePerson(){
+        String deleteName;
+        Person deletePerson;
+        do {
+            System.out.println("Input name you want to delete:");
+            deleteName = sc.next();
+            deletePerson = findPerson(deleteName);
+            if(deletePerson == null){
+                System.out.println("Cannot find " + deleteName + ", please try again:");
+            }
+        }while(deletePerson == null);
+        if(deletePerson instanceof Adult){
+            if(!((Adult) deletePerson).getHasDependent()){
+                deletePerson.removeRelated();
+                personList.remove(deletePerson);
+                System.out.println(deleteName + " was deleted.");
+            }else{
+                String dependentName = ((Adult) deletePerson).getDependent().getName();
+                Dependent dependentPerson = ((Adult) deletePerson).getDependent();
+
+                System.out.println(deleteName + " is parent of " + dependentName);
+                System.out.println("Remove " + deleteName + " will remove " + dependentName);
+                System.out.println("Do you wish do continue? (y/n)");
+                String choice = sc.next();
+                if(choice.equals("y")){
+                    ((Adult) deletePerson).getPartner().setDependent(null);
+                    ((Adult) deletePerson).getPartner().setHasDependent(false);
+                    ((Adult) deletePerson).getPartner().setPartner(null);
+                    deletePerson.removeRelated();
+                    dependentPerson.removeRelated();
+                    personList.remove(dependentPerson);
+                    personList.remove(deletePerson);
+                    System.out.println(deleteName + " was deleted.");
+                }else if(choice.equals("n")){
+                    System.out.println("delete not successful");
+                }
+            }
+        }else if(deletePerson instanceof Dependent){
+            for(int i = 0; i < deletePerson.getRelationship().size(); i++){
+                if(deletePerson.getRelationship().get(i).getType().equals("dependent")){
+                    ((Adult)deletePerson.getRelationship().get(i).getPerson()).setHasDependent(false);
+                }
+            }
+            deletePerson.removeRelated();
+            personList.remove(deletePerson);
+            System.out.println(deleteName + " was deleted.");
+        }
+    }
 
 }
