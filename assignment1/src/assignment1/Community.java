@@ -11,4 +11,8 @@ public class Community {
 
 	private String name;
 	private int age;
+	
+	public void getPerson(Person a) {
+		System.out.println();
+	}
 }

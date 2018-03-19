@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8b642f30-309e-4ccf-ba5d-97496a2bdcac" name="Default" comment="" />
+    <list default="true" id="8b642f30-309e-4ccf-ba5d-97496a2bdcac" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assignment1/src/assignment1/Community.java" afterPath="$PROJECT_DIR$/assignment1/src/assignment1/Community.java" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
