@@ -349,4 +349,54 @@ public class Community {
         personList.remove(deletePerson);
         System.out.println(deletePerson.getName() + " was deleted.");
     }
+    
+    private Person findPerson(String name){
+        for(int i = 0; i < personList.size(); i++){
+            if(personList.get(i).getName().equals(name)){
+                return personList.get(i);
+            }
+        }return null;
+    }
+
+    private void addToCommunity(){
+        System.out.println("Input Name:");
+        String name = sc.next();
+        System.out.println("Input age: ");
+        int age = sc.nextInt();
+        sc.nextLine();
+        System.out.println("Input gender:");
+        String gender = sc.next();
+        System.out.println("Do you wish to set up status now? (y/n)");
+        String choice = sc.next();
+        String status = "Not available";
+        if(choice.equals("y")){
+            System.out.println("Input status:");
+            status = sc.next();
+        }else if(choice.equals("n")){
+            status = "Not available";
+        }
+        if(age >= 16){
+            personList.add(addToAdult(name, age, gender, status));
+            System.out.println(name + " added to the community.");
+        }else{
+            if(getAvailParent() < 2){
+                System.out.println("Cannot add " + name + ". Not enough adults available.");
+            }else{
+                listAvailParent();
+                System.out.println("Input one parent's name: ");
+                String parent1 = sc.next();
+                System.out.println("input the other parent's name: ");
+                String parent2 = sc.next();
+                Adult adult1 = ((Adult) findPerson(parent1));
+                Adult adult2 = ((Adult) findPerson(parent2));
+                Person newDependent = new Dependent(name, age, gender, status);
+                adult1.addDependent(adult2, ((Dependent) newDependent));
+                adult2.addDependent(adult1, ((Dependent) newDependent));
+                personList.add(newDependent);
+                System.out.println(name + " added. " + parent1 + " and " + parent2 + " are now parents of " + name + ".");
+            }
+        }
+    }
+    
+    
 }
