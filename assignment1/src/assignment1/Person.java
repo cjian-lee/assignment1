@@ -1,6 +1,9 @@
 package assignment1;
 import java.util.ArrayList;
 
+//authour Chern Jian Lee
+
+
 public abstract class Person {
 
     private String name;

@@ -1,6 +1,7 @@
 package assignment1;
 
-import java.util.ArrayList;
+
+//author Chern Jian Lee
 
 public class Dependent extends Person{
     private boolean hasParent = true;

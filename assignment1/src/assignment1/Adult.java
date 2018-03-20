@@ -1,5 +1,6 @@
 package assignment1;
-import java.util.ArrayList;
+
+//author Chern Jian Lee
 
 public class Adult extends Person{
     private boolean hasDependent = false;
@@ -43,7 +44,6 @@ public class Adult extends Person{
 
 	@Override
 	public void printProfile() {
-		// TODO Auto-generated method stub
 		
 	}
   
