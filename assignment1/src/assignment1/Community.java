@@ -91,6 +91,7 @@ public class Community {
                 System.out.println("4  ->  Update Age");
                 System.out.println("5  ->  Update Gender");
                 System.out.println("6  ->  Update Status");
+                System.out.println("7  ->  Modify Existing Relationship");
                 System.out.println("0  ->  Return to Main Menu");
                 System.out.println("_________________________________________________________________");
                 System.out.println("Please input your choice:");
@@ -107,6 +108,8 @@ public class Community {
                     updateGender(person);
                 } else if (choice.equals("6")) {
                     updateStatus(person);
+                } else if (choice.equals("7")) {
+                	modifyRelationship(person);
                 } else if (choice.equals("0")) {
                     flag = true;
                 }
@@ -357,31 +360,40 @@ public class Community {
             }
         }return null;
     }
-
-    private void addToCommunity(){
+// age int validation realized. yes or no validation needed!!!!
+    private void addToCommunity() {
         System.out.println("Input Name:");
         String name = sc.next();
-        System.out.println("Input age: ");
-        int age = sc.nextInt();
-        sc.nextLine();
+        int age = -1;
+        do{
+            System.out.println("Input age:");
+            try {
+                age = sc.nextInt();
+            }catch(InputMismatchException e){
+                sc.nextLine();
+            }
+            if(age < 0){
+                System.out.println("Invalid Input. Age can only be positive number.");
+            }
+        }while(age < 0);
         System.out.println("Input gender:");
         String gender = sc.next();
         System.out.println("Do you wish to set up status now? (y/n)");
         String choice = sc.next();
         String status = "Not available";
-        if(choice.equals("y")){
+        if (choice.equals("y")) {
             System.out.println("Input status:");
             status = sc.next();
-        }else if(choice.equals("n")){
+        } else if (choice.equals("n")) {
             status = "Not available";
         }
-        if(age >= 16){
+        if (age >= 16) {
             personList.add(addToAdult(name, age, gender, status));
             System.out.println(name + " added to the community.");
-        }else{
-            if(getAvailParent() < 2){
+        } else {
+            if (getAvailParent() < 2) {
                 System.out.println("Cannot add " + name + ". Not enough adults available.");
-            }else{
+            } else {
                 listAvailParent();
                 System.out.println("Input one parent's name: ");
                 String parent1 = sc.next();
@@ -398,5 +410,109 @@ public class Community {
         }
     }
     
+    //more tests needed
+    private void modifyRelationship(Person person) {
+        if(person.getRelationship().size() == 0){
+            System.out.println("No other related people to modify, add a relationship first!");
+        }else {
+            if (person instanceof Adult) {
+                Adult adult = (Adult) person;
+                if (adult.getPartner() != null) {
+                    modifyHasPartnerRelation(adult);
+                } else {
+                    modifySingleRelation(adult);
+                }
+            } else {
+                System.out.println("Fail to modify!");
+                System.out.println("Reason: Dependent can only be friend with another dependent.");
+            }
+        }
+    }
+
+    private void modifySingleRelation(Adult adult){
+        System.out.println("!NOTE: Cannot add partner relationship with other person who has a partner!");
+        System.out.println("Input another person's name to modify existing relationship:");
+        String anotherName = sc.next();
+        Person anotherPerson = findPerson(anotherName);
+        if (anotherPerson != null && adult.withRelationship(anotherPerson)){
+            if (anotherPerson instanceof Adult) {
+                String existingRelation = adult.getRelationship().get(adult.relatedIndex(anotherPerson)).getType();
+                System.out.println(adult.getName() + " is currently " + existingRelation + " of " + anotherName);
+                System.out.println("Specify new relationship: ");
+                String newRelation = sc.next();
+                if(newRelation.equals("partner") && ((Adult) anotherPerson).getPartner() != null){
+                    System.out.println("Fail to modify relationship.");
+                    System.out.println("Reason: " + anotherPerson.getName() + " is already partner of " +
+                                        ((Adult) anotherPerson).getPartner().getName());
+                }else if(newRelation.equals("partner") && ((Adult) anotherPerson).getPartner() == null){
+                    adult.getRelationship().get(adult.relatedIndex(anotherPerson)).setType("partner");
+                    adult.setPartner((Adult)anotherPerson);
+                    anotherPerson.getRelationship().get(anotherPerson.relatedIndex(adult)).setType("partner");
+                    ((Adult) anotherPerson).setPartner(adult);
+                    System.out.println("Relationship modified successfully");
+                    System.out.println(adult.getName() + " is now " + newRelation + " of " + anotherName);
+                }else{
+                    adult.getRelationship().get(adult.relatedIndex(anotherPerson)).setType(newRelation);
+                    anotherPerson.getRelationship().get(anotherPerson.relatedIndex(adult)).setType(newRelation);
+                }
+            }else{
+                System.out.println("Fail to modify relationship.");
+                System.out.println("Reason: " + anotherName + " is a child/dependent");
+            }
+        }else{
+            System.out.println("Cannot find " + anotherName + " or " + anotherName + " not in " + adult.getName() +
+                    "'s relationship list, please try again.");
+        }
+    }
+
+    private void modifyHasPartnerRelation(Adult adult) {
+        System.out.println("!NOTE: " + adult.getName() + " is partner of " + adult.getPartner().getName() + "!");
+        System.out.println("!Cannot add partner relationship with other person!");
+        System.out.println("Input another person's name to modify existing relationship:");
+        String anotherName = sc.next();
+        Person anotherPerson = findPerson(anotherName);
+        if (anotherPerson != null && adult.withRelationship(anotherPerson)) {
+            if (anotherPerson instanceof Adult) {
+                String existingRelation = adult.getRelationship().get(adult.relatedIndex(anotherPerson)).getType();
+                System.out.println(adult.getName() + " is currently " + existingRelation + " of " + anotherName);
+                System.out.println("Specify new relationship: ");
+                String newRelation = sc.next();
+                if (newRelation.equals("partner")) {
+                    System.out.println("Fail to modify relationship.");
+                    System.out.println("Reason: " + adult.getName() + " is already partner of " + adult.getPartner().getName());
+                } else if(adult.getPartner().equals(anotherPerson)){
+                    if(adult.getHasDependent()) {
+                        System.out.println("Fail to modify relationship.");
+                        System.out.println("Reason: modify partner relationship with " + anotherName + " will affect " +
+                                adult.getDependent().getName());
+                        System.out.println("Try to delete " + adult.getName() + "'s dependent first!");
+                    }else{
+                        adult.getRelationship().get(adult.relatedIndex(anotherPerson)).setType(newRelation);
+                        adult.setPartner(null);
+                        anotherPerson.getRelationship().get(anotherPerson.relatedIndex(adult)).setType(newRelation);
+                        ((Adult) anotherPerson).setPartner(null);
+                        System.out.println("Relationship modified successfully");
+                        System.out.println(adult.getName() + " is now " + newRelation + " of " + anotherName);
+                    }
+                } else{
+                    if (newRelation.equals(existingRelation)) {
+                        System.out.println("Fail to modify relationship.");
+                        System.out.println("Reason: " + adult.getName() + " is already " + existingRelation + " of " + anotherName);
+                    } else {
+                        adult.getRelationship().get(adult.relatedIndex(anotherPerson)).setType(newRelation);
+                        anotherPerson.getRelationship().get(anotherPerson.relatedIndex(adult)).setType(newRelation);
+                        System.out.println("Relationship modified successfully");
+                        System.out.println(adult.getName() + " is now " + newRelation + " of " + anotherName);
+                    }
+                }
+            } else {
+                System.out.println("Fail to modify relationship.");
+                System.out.println("Reason: " + anotherName + " is a child/dependent");
+            }
+        } else {
+            System.out.println("Cannot find " + anotherName + " or " + anotherName + " not in " + adult.getName() +
+                                "'s relationship list, please try again.");
+        }
+    }
     
 }
