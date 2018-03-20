@@ -362,6 +362,16 @@ public class Community {
         }return null;
     }
     
+    private String yesNoValid(){
+        String s;
+        do{
+            s = sc.next();
+            if(!s.equals("y") || !s.equals("n")){
+                System.out.println("Invalid input. Input 'y' for yes or 'n' for no");
+            }
+        }while(!s.equals("y") && !s.equals("n"));
+        return s;
+    }
     
 // age int validation realized. yes or no validation needed!!!!
     private void addToCommunity() {
@@ -382,7 +392,7 @@ public class Community {
         System.out.println("Input gender:");
         String gender = sc.next();
         System.out.println("Do you wish to set up status now? (y/n)");
-        String choice = sc.next();
+        String choice = yesNoValid();
         String status = "Not available";
         if (choice.equals("y")) {
             System.out.println("Input status:");
