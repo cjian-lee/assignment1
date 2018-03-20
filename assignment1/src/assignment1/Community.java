@@ -8,6 +8,7 @@ package assignment1;
  *
  */
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
@@ -360,6 +361,8 @@ public class Community {
             }
         }return null;
     }
+    
+    
 // age int validation realized. yes or no validation needed!!!!
     private void addToCommunity() {
         System.out.println("Input Name:");
