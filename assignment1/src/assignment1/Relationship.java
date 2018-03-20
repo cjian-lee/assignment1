@@ -1,12 +1,12 @@
 package assignment1;
 
-import java.util.ArrayList;
+
+//author Chern Jian Lee
 
 public class Relationship {
 
     private String type;
     private Person person;
-    private ArrayList<String> list = new ArrayList<String>();
 
     //constructor to initialize a 1 to 1 relationship
     public Relationship(String type, Person person) {
