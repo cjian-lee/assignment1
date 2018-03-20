@@ -320,14 +320,7 @@ public class Community {
             System.out.println(deletePerson.getName() + " is parent of " + dependentName);
             System.out.println("Remove " + deletePerson.getName() + " will remove " + dependentName);
             System.out.println("Do you wish do continue? (y/n)");
-            String choice;
-            do {
-                choice = sc.next();
-                if(!choice.equals("y") && !choice.equals("n")){
-                    System.out.println("Wrong Input! Please input 'y' for yes or 'n' for no.");
-                    System.out.println("Do you wish do continue? (y/n)");
-                }
-            }while(!choice.equals("y") && !choice.equals("n"));
+            String choice = yesNoValid();
             if(choice.equals("y")){
                 ((Adult) deletePerson).getPartner().setDependent(null);
                 ((Adult) deletePerson).getPartner().setHasDependent(false);
