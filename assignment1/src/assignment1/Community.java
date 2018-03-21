@@ -22,17 +22,17 @@ public class Community {
     public void printMenu() {
         boolean flag = false;
         while (!flag) {
-            System.out.println("====================================");
-            System.out.println("           MiniNet Menu");
-            System.out.println("------------------------------------");
-            System.out.println("1  ->  List Everyone");
-            System.out.println("2  ->  Select a person");
-            System.out.println("3  ->  Add new person");
-            System.out.println("4  ->  Remove Existing Person");
-            System.out.println("5  ->  Are these two direct friends?");
-            System.out.println("0  ->  Exist MiniNet");
-            System.out.println("====================================");
-            System.out.println("Input number of function: ");
+            System.out.println("====================================\n"+
+                               "           MiniNet Menu\n" +
+                               "------------------------------------\n" +
+                               "1  ->  List Everyone\n" +
+                               "2  ->  Select a person\n" +
+                               "3  ->  Add new person\n" +
+                               "4  ->  Remove Existing Person\n" +
+                               "5  ->  Are these two direct friends?\n" +
+                               "0  ->  Exist MiniNet\n" +
+                               "====================================\n" +
+                               "Input number of function:");
             String choice = sc.next();
             switch (choice) {
                 case "1":
@@ -84,18 +84,18 @@ public class Community {
         } else {
             boolean flag = false;
             do {
-                System.out.println("________________________________________________________________");
-                System.out.println("Input following number for further manipulations on " + person.getName());
-                System.out.println("1  ->  Print Profile");
-                System.out.println("2  ->  Add Relationship");
-                System.out.println("3  ->  Update Name");
-                System.out.println("4  ->  Update Age");
-                System.out.println("5  ->  Update Gender");
-                System.out.println("6  ->  Update Status");
-                System.out.println("7  ->  Modify Existing Relationship");
-                System.out.println("0  ->  Return to Main Menu");
-                System.out.println("_________________________________________________________________");
-                System.out.println("Please input your choice:");
+                System.out.println("________________________________________________________________\n" +
+                                   "Input following number for further manipulations on " + person.getName() + "\n" +
+                                   "1  ->  Print Profile\n" + 
+                                   "2  ->  Add Relationship\n" +
+                                   "3  ->  Update Name\n" + 
+                                   "4  ->  Update Age\n" +
+                                   "5  ->  Update Gender\n" +
+                                   "6  ->  Update Status\n" + 
+                                   "7  ->  Modify Existing Relationship\n" +
+                                   "0  ->  Return to Main Menu\n" +
+                                   "_________________________________________________________________\n" +
+                                   "Please input your choice:");
                 String choice = sc.next();
                 if (choice.equals("1")) {
                     person.printProfile();
@@ -221,9 +221,9 @@ public class Community {
             personName = sc.next();
         if (findPerson(personName) != null && !findPerson(personName).equals(adult)) {
             if(findPerson(personName) instanceof Adult) {
-                System.out.println("Specify relationship type: ");
+                System.out.println("Specify relationship type(partner/friend): ");
                 System.out.println("NOTE: person who is partner of another person cannot be partner with!");
-                String type = sc.next();
+                String type = partnerOrFriend();
                 if (adult.getPartner() != null) {
                     if (type.equals("partner")) {
                         System.out.println(adult.getName() + " is already partner of " + adult.getPartner().getName());
@@ -269,15 +269,17 @@ public class Community {
             do {
                 System.out.println("Input first person's name:");
                 firstName = sc.next();
-                System.out.println("Input second person's name:");
-                secondName = sc.next();
                 if (findPerson(firstName) == null) {
                     System.out.println("Cannot find first person, please try again.");
                 }
+                }while(findPerson(firstName) == null);
+             do{
+                System.out.println("Input second person's name:");
+                secondName = sc.next();
                 if (findPerson(secondName) == null) {
                     System.out.println("Cannot find second person, please try again.");
                 }
-            } while (findPerson(firstName) == null || findPerson(secondName) == null);
+            } while (findPerson(secondName) == null);
             Person firstPerson = findPerson(firstName);
             Person secondPerson = findPerson(secondName);
             if (firstPerson.withRelationship(secondPerson)) {
@@ -534,7 +536,19 @@ public class Community {
         return s;
     }
     
-// age int validation realized. yes or no validation needed!!!!
+    
+    private String partnerOrFriend(){
+        String s;
+        do{
+            s = sc.next();
+            if(!s.equals("partner") && !s.equals("friend")){
+                System.out.println("! Wrong Relationship,  An Adult Can Only Be Partner or Friend With Another Adult !");
+                System.out.println("! Input 'partner' Or 'friend' !");
+            }
+        }while(!s.equals("partner") && !s.equals("friend"));
+        return s;
+    }
+    
     private void listAvailParent(){
         int counter = 0;
         for(int i = 0; i < personList.size(); i++){
