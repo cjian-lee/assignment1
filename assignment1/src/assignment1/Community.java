@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Driver {
+public class Community {
     private ArrayList<Person> personList = new ArrayList<>();
     private Scanner sc = new Scanner(System.in);
 
