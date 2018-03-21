@@ -11,19 +11,17 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-
-public class Community {
-	
+public class Driver {
     private ArrayList<Person> personList = new ArrayList<>();
     private Scanner sc = new Scanner(System.in);
-    
+
     public ArrayList<Person> getPersonList() {
         return personList;
     }
-    
-    public void printMenu(){
+
+    public void printMenu() {
         boolean flag = false;
-        while(!flag){
+        while (!flag) {
             System.out.println("====================================");
             System.out.println("           MiniNet Menu");
             System.out.println("------------------------------------");
@@ -36,7 +34,7 @@ public class Community {
             System.out.println("====================================");
             System.out.println("Input number of function: ");
             String choice = sc.next();
-            switch(choice){
+            switch (choice) {
                 case "1":
                     listEveryone();
                     break;
@@ -51,6 +49,7 @@ public class Community {
                     break;
                 case "5":
                     directFriend();
+                    break;
                 case "0":
                     flag = true;
                     break;
@@ -60,11 +59,12 @@ public class Community {
         }
     }
 
-    private void listEveryone(){
+
+    private void listEveryone() {
         System.out.println("=============================");
         System.out.println("|Listing People in Community|");
         System.out.println("-----------------------------");
-        if(personList.size() == 0) {
+        if (personList.size() == 0) {
             System.out.println("|                           |");
             System.out.println("|There's no one in community|");
             System.out.println("|                           |");
@@ -72,16 +72,16 @@ public class Community {
             return;
         }
         for (int i = 0; i < personList.size(); i++) {
-            System.out.println((i + 1) + ": " +personList.get(i).getName());
+            System.out.println((i + 1) + ": " + personList.get(i).getName());
         }
         System.out.println("=============================");
     }
     
-    private void updateSelected(Person person){
-        if(person == null){
+    private void updateSelected(Person person) {
+        if (person == null) {
             System.out.println("|Try to add a person first  |");
             System.out.println("=============================");
-        }else {
+        } else {
             boolean flag = false;
             do {
                 System.out.println("________________________________________________________________");
@@ -110,152 +110,160 @@ public class Community {
                 } else if (choice.equals("6")) {
                     updateStatus(person);
                 } else if (choice.equals("7")) {
-                	modifyRelationship(person);
+                    modifyRelationship(person);
                 } else if (choice.equals("0")) {
+                    System.out.println("RETURNING BACK TO MAIN MENU...");
                     flag = true;
+                } else{
+                    System.out.println("! Invalid Input. Please try again !");
                 }
             } while (!flag);
         }
     }
     
-    private void updateName(Person person){
+    private void updateName(Person person) {
         System.out.println("Input new name:");
         person.setName(sc.next());
         System.out.println("Name update successful!");
     }
 
-    private void updateAge(Person person){
-        System.out.println("Input new age:");
-        int newAge = sc.nextInt();
-        sc.nextLine();
-        if(person.getAge() < 16 && newAge >= 16){
-            System.out.println("Cannot change child to adult");
-            System.out.println("Age update not successful.");
-        }else if(person.getAge() >= 16 && newAge < 16){
-            System.out.println("Cannot change adult to child");
-            System.out.println("Age update not successful.");
-        }else{
+    private void updateAge(Person person) {
+        int newAge = ageValid();
+        if (person.getAge() < 16 && newAge >= 16) {
+            System.out.println("! Cannot Change Child To Adult !");
+            System.out.println("! Age Update Not Successful !");
+        } else if (person.getAge() >= 16 && newAge < 16) {
+            System.out.println("! Cannot Change Adult To Child !");
+            System.out.println("! Age Update Not Successful !");
+        } else {
             person.setAge(newAge);
-            System.out.println("Age update successfully!");
+            System.out.println("Age Update Successful");
         }
     }
 
-    private void updateGender(Person person){
-        System.out.println("Input new gender:");
+    private void updateGender(Person person) {
+        System.out.println("Input New Gender:");
         person.setGender(sc.next());
-        System.out.println("Gender update successful!");
+        System.out.println("Gender Update Successful");
     }
 
-    private void updateStatus(Person person){
-        System.out.println("Input new status:");
+    private void updateStatus(Person person) {
+        System.out.println("Input New Status:");
         person.setStatus(sc.next());
-        System.out.println("Status update successful!");
+        System.out.println("Status Update Successful");
     }
    //infinite loop fixed
-    private Person selectPerson(){
+    private Person selectPerson() {
         listEveryone();
-        if(personList.size() != 0){
-            System.out.println("Input person's name for further manipulation:");
+        if (personList.size() != 0) {
+            System.out.println("Input Person's Name For Further Manipulation:");
             boolean flag = false;
-            while(!flag) {
+            while (!flag) {
                 String personName = sc.next();
                 for (int i = 0; i < personList.size(); i++) {
                     if (personList.get(i).getName().equals(personName)) {
-                        System.out.println(personList.get(i).getName() + " has been selected.");
+                        System.out.println(personList.get(i).getName() + " Has Been Selected");
                         return personList.get(i);
                     }
                 }
-            System.out.println("Cannot find " + personName + ". Please try again: ");
+                System.out.println("! Cannot Find " + personName + ". Please Try Again !");
+                listEveryone();
             }
-        }return null;
+        }
+        return null;
     }
     
-    private void addRelationship(Person person){
-        System.out.println("People in community to have relationship with: ");
-        if(personList.size() == 1){
+    private void addRelationship(Person person) {
+        if (personList.size() == 1) {
             System.out.println("No other person to have relationship with, add another person first.");
             return;
         }
-        if(person instanceof Adult){
+        if (person instanceof Adult) {
             addAdultRelation((Adult) person);
-        }else if(person instanceof Dependent){
+        } else if (person instanceof Dependent) {
             addChildrenRelation((Dependent) person);
         }
     }
 
-    private void addChildrenRelation(Dependent dependent){
-        if(dependent.getAge() <= 2){
+    private void addChildrenRelation(Dependent dependent) {
+        if (dependent.getAge() <= 2) {
             System.out.println("Children who is 2 or under 2 years old cannot have any friend");
-        }else{
+        } else {
             System.out.println("People in community to have relationship with: ");
             int counter = 1;
-            for(int i = 0; i < personList.size(); i++){
-                if(!personList.get(i).getName().equals(dependent.getName())){
-                    System.out.println(counter + ": " + personList.get(i).getName() + "  |  Age: " +personList.get(i).getAge());
+            for (int i = 0; i < personList.size(); i++) {
+                if (!personList.get(i).getName().equals(dependent.getName())) {
+                    System.out.println(counter + ": " + personList.get(i).getName() + "  |  Age: " + personList.get(i).getAge());
                 }
             }
             System.out.println("Input person's name to establish a friendship with:");
             String personName = sc.next();
-            if (findPerson(personName) != null){
-                dependent.addRelationship("friends", findPerson(personName));
-            }else{
-                System.out.println("Invalid Input");
+            if (findPerson(personName) != null && !findPerson(personName).equals(dependent)) {
+                dependent.addRelationship("friend", findPerson(personName));
+                System.out.println(dependent.getName() + " is now friend of " + personName);
+            } else {
+                System.out.println("! Cannot Find " + personName + " or User Trying To Add Self-Relationship !");
             }
         }
     }
 
-    private void addAdultRelation(Adult adult){
-        System.out.println("People in community to have relationship with: ");
-        int counter = 1;
-        for(int i = 0; i < personList.size(); i++){
-            if(!personList.get(i).getName().equals(adult.getName())){
-                System.out.println(counter + ": " + personList.get(i).getName() + "  |  Age: " +personList.get(i).getAge());
-                counter++;
-            }
-        }
-        System.out.println("Input person's name to establish a relationship:");
-        String personName = sc.next();
-        if(findPerson(personName) != null && findPerson(personName) instanceof Adult){
-            System.out.println("Specify relationship type: ");
-            System.out.println("NOTE: person who is partner of another person cannot be partner with!");
-            String type = sc.next();
-            if(adult.getPartner() != null){
-                if(type.equals("partner")){
-                    System.out.println(adult.getName() + " is already partner of " + adult.getPartner().getName());
-                    System.out.println("Cannot add partner relationship with other person");
-                }else{
-                    adult.addRelationship(type, (Adult)findPerson(personName));
+    private void addAdultRelation(Adult adult) {
+        String personName;
+            System.out.println("People in community to have relationship with: ");
+            int counter = 1;
+            for (int i = 0; i < personList.size(); i++) {
+                if (!personList.get(i).getName().equals(adult.getName())) {
+                    System.out.println(counter + ": " + personList.get(i).getName() + "  |  Age: " + personList.get(i).getAge());
+                    counter++;
                 }
-            }else{
-                if(type.equals("partner") && ((Adult) findPerson(personName)).getPartner() != null){
-                    System.out.println(personName + " is already partner of " + ((Adult) findPerson(personName)).getPartner().getName());
-                    System.out.println("Cannot add partner relationship with " + personName);
-                }else{
-                    adult.addRelationship(type, (Adult)findPerson(personName));
-                    if(type.equals("partner")){
-                        adult.setPartner((Adult) findPerson(personName));
-                        ((Adult) findPerson(personName)).setPartner(adult);
+            }
+            System.out.println("Input person's name to establish a relationship:");
+            personName = sc.next();
+        if (findPerson(personName) != null && !findPerson(personName).equals(adult)) {
+            if(findPerson(personName) instanceof Adult) {
+                System.out.println("Specify relationship type: ");
+                System.out.println("NOTE: person who is partner of another person cannot be partner with!");
+                String type = sc.next();
+                if (adult.getPartner() != null) {
+                    if (type.equals("partner")) {
+                        System.out.println(adult.getName() + " is already partner of " + adult.getPartner().getName());
+                        System.out.println("Cannot add partner relationship with other person");
+                    } else {
+                        adult.addRelationship(type, (Adult) findPerson(personName));
+                    }
+                } else {
+                    if (type.equals("partner") && ((Adult) findPerson(personName)).getPartner() != null) {
+                        System.out.println(personName + " is already partner of " + ((Adult) findPerson(personName)).getPartner().getName());
+                        System.out.println("Cannot add partner relationship with " + personName);
+                    } else {
+                        adult.addRelationship(type, (Adult) findPerson(personName));
+                        if (type.equals("partner")) {
+                            adult.setPartner((Adult) findPerson(personName));
+                            ((Adult) findPerson(personName)).setPartner(adult);
+                        }
                     }
                 }
+            }else{
+                System.out.println("! Cannot Establish Relationship With Other Dependent !" );
             }
-        }else{
-            System.out.println("Invalid Input or out of age range");
+        } else {
+            System.out.println("! Cannot Find " + personName + " or User Trying To Add Self-Relationship !");
         }
     }
     
     
-    private void directFriend(){
-        if(personList.size() == 0){
+    private void directFriend() {
+        if (personList.size() == 0) {
             System.out.println("=============================");
             System.out.println("|There's no one in community|");
             System.out.println("|Try to add two people first|");
             System.out.println("=============================");
-        }else if(personList.size() == 1){
+        } else if (personList.size() == 1) {
             System.out.println("=============================");
             System.out.println("|Only one person in community|");
             System.out.println("|Try to add another first    |");
             System.out.println("=============================");
-        }else{
+        } else {
             listEveryone();
             String firstName, secondName;
             do {
@@ -263,34 +271,34 @@ public class Community {
                 firstName = sc.next();
                 System.out.println("Input second person's name:");
                 secondName = sc.next();
-                if(findPerson(firstName) == null){
+                if (findPerson(firstName) == null) {
                     System.out.println("Cannot find first person, please try again.");
                 }
-                if(findPerson(secondName) == null){
+                if (findPerson(secondName) == null) {
                     System.out.println("Cannot find second person, please try again.");
                 }
-            }while(findPerson(firstName) == null || findPerson(secondName) == null);
+            } while (findPerson(firstName) == null || findPerson(secondName) == null);
             Person firstPerson = findPerson(firstName);
             Person secondPerson = findPerson(secondName);
-            if(firstPerson.withRelationship(secondPerson)){
+            if (firstPerson.withRelationship(secondPerson)) {
                 System.out.println(firstName + " is " + firstPerson.getRelationship().get(firstPerson.relatedIndex(secondPerson)).getType()
-                                    + " of " + secondName);
-            }else{
+                        + " of " + secondName);
+            } else {
                 System.out.println(firstName + " is not in relationship with " + secondName);
             }
         }
     }
     
     //delete person form personList
-    private void removePerson(){
+    private void removePerson() {
         String deleteName;
         Person deletePerson;
-        if(personList.size() == 0){
+        if (personList.size() == 0) {
             System.out.println("=============================");
             System.out.println("|There's no one in community|");
             System.out.println("|Try to add one person first|");
             System.out.println("=============================");
-        }else {
+        } else {
             do {
                 listEveryone();
                 System.out.println("Input name you want to delete:");
@@ -308,20 +316,20 @@ public class Community {
         }
     }
 
-    private void deleteAdult(Person deletePerson){
-        if(!((Adult) deletePerson).getHasDependent()){
+    private void deleteAdult(Person deletePerson) {
+        if (!((Adult) deletePerson).getHasDependent()) {
             deletePerson.removeRelated();
             personList.remove(deletePerson);
             System.out.println(deletePerson.getName() + " was deleted.");
-        }else{
+        } else {
             String dependentName = ((Adult) deletePerson).getDependent().getName();
             Dependent dependentPerson = ((Adult) deletePerson).getDependent();
 
             System.out.println(deletePerson.getName() + " is parent of " + dependentName);
             System.out.println("Remove " + deletePerson.getName() + " will remove " + dependentName);
-            System.out.println("Do you wish do continue? (y/n)");
+            System.out.println("Do you wish to continue? (y/n)");
             String choice = yesNoValid();
-            if(choice.equals("y")){
+            if (choice.equals("y")) {
                 ((Adult) deletePerson).getPartner().setDependent(null);
                 ((Adult) deletePerson).getPartner().setHasDependent(false);
                 ((Adult) deletePerson).getPartner().setPartner(null);
@@ -330,16 +338,16 @@ public class Community {
                 personList.remove(dependentPerson);
                 personList.remove(deletePerson);
                 System.out.println(deletePerson.getName() + " was deleted.");
-            }else if(choice.equals("n")){
+            } else if (choice.equals("n")) {
                 System.out.println("delete not successful");
             }
         }
     }
 
-    private void deleteDependent(Person deletePerson){
-        for(int i = 0; i < deletePerson.getRelationship().size(); i++){
-            if(deletePerson.getRelationship().get(i).getType().equals("dependent")){
-                ((Adult)deletePerson.getRelationship().get(i).getPerson()).setHasDependent(false);
+    private void deleteDependent(Person deletePerson) {
+        for (int i = 0; i < deletePerson.getRelationship().size(); i++) {
+            if (deletePerson.getRelationship().get(i).getType().equals("dependent")) {
+                ((Adult) deletePerson.getRelationship().get(i).getPerson()).setHasDependent(false);
             }
         }
         deletePerson.removeRelated();
@@ -347,41 +355,16 @@ public class Community {
         System.out.println(deletePerson.getName() + " was deleted.");
     }
     
-    private Person findPerson(String name){
-        for(int i = 0; i < personList.size(); i++){
-            if(personList.get(i).getName().equals(name)){
-                return personList.get(i);
-            }
-        }return null;
-    }
     
-    private String yesNoValid(){
-        String s;
-        do{
-            s = sc.next();
-            if(!s.equals("y") || !s.equals("n")){
-                System.out.println("Invalid input. Input 'y' for yes or 'n' for no");
-            }
-        }while(!s.equals("y") && !s.equals("n"));
-        return s;
-    }
-    
-// age int validation realized. yes or no validation needed!!!!
     private void addToCommunity() {
         System.out.println("Input Name:");
         String name = sc.next();
-        int age = -1;
-        do{
-            System.out.println("Input age:");
-            try {
-                age = sc.nextInt();
-            }catch(InputMismatchException e){
-                sc.nextLine();
-            }
-            if(age < 0){
-                System.out.println("Invalid Input. Age can only be positive number.");
-            }
-        }while(age < 0);
+        if(findPerson(name) != null){
+            System.out.println("! " + name + " is Already In Community !");
+            System.out.println("! Add To Community Not Successful !");
+            return;
+        }
+        int age = ageValid();
         System.out.println("Input gender:");
         String gender = sc.next();
         System.out.println("Do you wish to set up status now? (y/n)");
@@ -401,22 +384,29 @@ public class Community {
                 System.out.println("Cannot add " + name + ". Not enough adults available.");
             } else {
                 listAvailParent();
-                System.out.println("Input one parent's name: ");
-                String parent1 = sc.next();
-                System.out.println("input the other parent's name: ");
-                String parent2 = sc.next();
-                Adult adult1 = ((Adult) findPerson(parent1));
-                Adult adult2 = ((Adult) findPerson(parent2));
+                Adult adult1, adult2;
+                do {
+                    System.out.println("Input one parent's name: ");
+                    String parent1 = sc.next();
+                    System.out.println("input the other parent's name: ");
+                    String parent2 = sc.next();
+                    adult1 = ((Adult) findPerson(parent1));
+                    adult2 = ((Adult) findPerson(parent2));
+                    if(adult1 == null || adult2 == null){
+                        System.out.println("! Invalid Input. Please Input Names Of Following Available Adults !");
+                        listAvailParent();
+                    }
+                }while(adult1 == null || adult2 == null);
                 Person newDependent = new Dependent(name, age, gender, status);
                 adult1.addDependent(adult2, ((Dependent) newDependent));
                 adult2.addDependent(adult1, ((Dependent) newDependent));
                 personList.add(newDependent);
-                System.out.println(name + " added. " + parent1 + " and " + parent2 + " are now parents of " + name + ".");
+                System.out.println(name + " added. " + adult1.getName() + " and " + adult2.getName() + " are now parents of " + name + ".");
             }
         }
     }
+
     
-    //more tests needed
     private void modifyRelationship(Person person) {
         if(person.getRelationship().size() == 0){
             System.out.println("No other related people to modify, add a relationship first!");
@@ -520,5 +510,70 @@ public class Community {
                                 "'s relationship list, please try again.");
         }
     }
+
     
+    
+    private Person findPerson(String name) {
+        for (int i = 0; i < personList.size(); i++) {
+            if (personList.get(i).getName().equals(name)) {
+                return personList.get(i);
+            }
+        }
+        return null;
+    }
+
+    
+    private String yesNoValid(){
+        String s;
+        do{
+            s = sc.next();
+            if(!s.equals("y") && !s.equals("n")){
+                System.out.println("Invalid input. Input 'y' for yes or 'n' for no");
+            }
+        }while(!s.equals("y") && !s.equals("n"));
+        return s;
+    }
+    
+// age int validation realized. yes or no validation needed!!!!
+    private void listAvailParent(){
+        int counter = 0;
+        for(int i = 0; i < personList.size(); i++){
+            if(personList.get(i) instanceof Adult && !((Adult)personList.get(i)).getHasDependent()){
+                counter++;
+                System.out.println(counter + ":   " + personList.get(i).getName());
+            }
+        }
+    }
+    private int getAvailParent(){
+        int counter = 0;
+        for(int i = 0; i < personList.size(); i++){
+            if(personList.get(i) instanceof Adult && !((Adult)personList.get(i)).getHasDependent()){
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    private Person addToAdult(String name, int age, String gender, String status){
+        return new Adult(name, age, gender, status);
+    }
+
+    private int ageValid(){
+        int age = -1;
+        do{
+            System.out.println("Input age:");
+            try {
+                age = sc.nextInt();
+            }catch(InputMismatchException e){
+                sc.nextLine();
+            }
+            if(age < 0){
+                System.out.println("Invalid Input. Age can only be positive number.");
+            }
+        }while(age < 0);
+        return age;
+    }
+
+
+
 }
