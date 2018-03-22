@@ -3,7 +3,6 @@ package assignment1;
 
 //author Chern Jian Lee
 
-
 public class Relationship {
 
     private String type;

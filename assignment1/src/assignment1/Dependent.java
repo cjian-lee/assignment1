@@ -3,7 +3,6 @@ package assignment1;
 
 //author Chern Jian Lee
 
-
 public class Dependent extends Person{
     public Dependent(String name, int age, String gender, String status, boolean image) {
         super(name, age, gender, status, image);
@@ -56,5 +55,4 @@ public class Dependent extends Person{
         System.out.println("===================================");
     }
 }
-
 

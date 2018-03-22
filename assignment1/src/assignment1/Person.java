@@ -129,14 +129,8 @@ public abstract class Person {
         }
     }
 
-
-
     //abstract class to be overridden in subclasses
     public abstract void printProfile();
 
 
-
-
 }
-
-
