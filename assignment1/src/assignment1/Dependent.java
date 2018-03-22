@@ -3,44 +3,10 @@ package assignment1;
 
 //author Chern Jian Lee
 
+
 public class Dependent extends Person{
-    private boolean hasParent = true;
-
-    public Dependent(String name, int age, String gender) {
-        super(name, age, gender);
-    }
-
-    public Dependent(String name, int age, String gender, String status) {
-        super(name, age, gender, status);
-    }
-//
-//    public void addParents(Adult adult1, Adult adult2){
-//        adult1.addDependent(adult2, this);
-//        adult2.addDependent(adult1, this);
-//        this.hasParent = true;
-//    }
-//need to be fixed
-    public void addRelationship(String type, Dependent dependent){
-        if (withinRange(dependent)){
-            if(withRelationship(dependent)){
-                System.out.println(getName() + " and " + dependent.getName() + " are already in relationship");
-            }else{
-                getRelationship().add(new Relationship(type, dependent));
-                dependent.getRelationship().add(new Relationship(type, this));
-            }
-        }else{
-            System.out.println("Out of age range.");
-        }
-    }
-
-    private boolean withinRange(Dependent dependent){
-        if(dependent.getAge() > 2 && dependent.getAge() < 16){
-            if(Math.abs(dependent.getAge()- getAge()) >= 3){
-                return true;
-            }else{
-                return false;
-            }
-        }return false;
+    public Dependent(String name, int age, String gender, String status, boolean image) {
+        super(name, age, gender, status, image);
     }
 
     public void addRelationship(String type, Person person){
@@ -50,9 +16,11 @@ public class Dependent extends Person{
             }else{
                 getRelationship().add(new Relationship(type, person));
                 person.getRelationship().add(new Relationship(type, this));
+                System.out.println(this.getName() + " is now friend of " + person.getName());
             }
         }else{
-            System.out.println("Out of age range.");
+            System.out.println("! Cannot Add Friend With " + person.getName() + " !\n" +
+                               "! Children Can Only Have Friends With At Most 3 Year Age Gap !.");
         }
     }
 
@@ -70,13 +38,15 @@ public class Dependent extends Person{
 
     @Override
     public void printProfile() {
-        System.out.println("===================================");
-        System.out.println("Print Profile of " + getName());
-        System.out.println("-----------------------------------");
-        System.out.println("Name   -> " + getName());
-        System.out.println("Age    -> " + getAge());
-        System.out.println("Gender -> " + getGender());
-        System.out.println("Status -> " + getStatus());
+        System.out.println("===================================\n" +
+                           "Print Profile of " + getName() + "\n" +
+                           "-----------------------------------\n" +
+                           "Name   -> " + getName() + "\n" +
+                           "Age    -> " + getAge() + "\n" +
+                           "Gender -> " + getGender() + "\n" +
+                           "Status -> " + getStatus() + "\n" +
+                           "Image  -> " + (getImage()?"Switched On":"Switched Off") + "\n" +
+                           "-----------------------------------" );
         if(hasRelationship()){
             printRelation();
             printFamily();
@@ -86,4 +56,5 @@ public class Dependent extends Person{
         System.out.println("===================================");
     }
 }
+
 
