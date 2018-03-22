@@ -80,7 +80,7 @@ public class Community {
                                "| 0  ->  Exist MiniNet                 |\n" +
                                "========================================\n" +
                                "Input number of function: ");
-            String choice = sc.next();
+            String choice = sc.nextLine();
             switch (choice) {
                 case "1":
                     listEveryone();
@@ -110,14 +110,14 @@ public class Community {
      * to list everyone's name within community
      */
     private void listEveryone() {
-        System.out.println("==========================================");
-        System.out.println("|       Listing People in Community      |");
-        System.out.println("------------------------------------------");
+        System.out.println("===============================================");
+        System.out.println("|         Listing People in Community         |");
+        System.out.println("-----------------------------------------------");
         if (personList.size() == 0) {
-            System.out.println("|                                        |");
-            System.out.println("|       There's no one in community      |");
-            System.out.println("|                                        |");
-            System.out.println("==========================================");
+            System.out.println("|                                             |");
+            System.out.println("|         There's no one in community         |");
+            System.out.println("|                                             |");
+            System.out.println("===============================================");
             return;
         }
         String personType;
@@ -129,10 +129,10 @@ public class Community {
             }
 
             System.out.print((i + 1) + ":Name -> ");
-            System.out.printf("%-10s|", personList.get(i).getName());
+            System.out.printf("%-15s|", personList.get(i).getName());
             System.out.println("    Type -> " + personType);
         }
-        System.out.println("==========================================");
+        System.out.println("===============================================");
     }
 
     /**
@@ -141,8 +141,8 @@ public class Community {
      */
     private void updateSelected(Person person) {
         if (person == null) {
-            System.out.println("|Try to add a person first  |");
-            System.out.println("=============================");
+            System.out.println("|          Try to add a person first          |");
+            System.out.println("===============================================");
         } else {
             boolean flag = false;
             do {
@@ -159,7 +159,7 @@ public class Community {
                                    "0  ->  Return to Main Menu\n" +
                                    "_________________________________________________________________\n" +
                                    "Please input your choice:");
-                String choice = sc.next();
+                String choice = sc.nextLine();
                 if (choice.equals("1")) {
                     person.printProfile();
                 } else if (choice.equals("2")) {
@@ -192,7 +192,8 @@ public class Community {
      */
     private void updateName(Person person) {
         System.out.println("Input new name:");
-        person.setName(sc.next());
+        String newName = sc.nextLine();
+        person.setName(newName);
         System.out.println("Name update successful!");
     }
 
@@ -219,7 +220,7 @@ public class Community {
      */
     private void updateGender(Person person) {
         System.out.println("Input New Gender:");
-        person.setGender(sc.next());
+        person.setGender(sc.nextLine());
         System.out.println("Gender Update Successful");
     }
 
@@ -228,7 +229,7 @@ public class Community {
      */
     private void updateStatus(Person person) {
         System.out.println("Input New Status:");
-        person.setStatus(sc.next());
+        person.setStatus(sc.nextLine());
         System.out.println("Status Update Successful");
     }
 
@@ -261,7 +262,7 @@ public class Community {
             System.out.println("Input Person's Name For Further Manipulation:");
             boolean flag = false;
             while (!flag) {
-                String personName = sc.next();
+                String personName = sc.nextLine();
                 for (int i = 0; i < personList.size(); i++) {
                     if (personList.get(i).getName().equals(personName)) {
                         System.out.println(personList.get(i).getName() + " Has Been Selected");
@@ -275,7 +276,10 @@ public class Community {
         return null;
     }
 
-    //4:19 19/03/2018
+    /**
+     * to add relationship to an adult or child
+     * @param person
+     */
     private void addRelationship(Person person) {
         if (personList.size() == 1) {
             System.out.println("No other person to have relationship with, add another person first.");
@@ -300,7 +304,7 @@ public class Community {
                 }
             }
             System.out.println("Input person's name to establish a friendship with:");
-            String personName = sc.next();
+            String personName = sc.nextLine();
             if (findPerson(personName) != null && !findPerson(personName).equals(dependent)) {
                 dependent.addRelationship("friend", findPerson(personName));
             } else {
@@ -322,7 +326,7 @@ public class Community {
                 }
             }
             System.out.println("Input person's name to establish a relationship:");
-            personName = sc.next();
+            personName = sc.nextLine();
         if (findPerson(personName) != null && !findPerson(personName).equals(adult)) {
             if(findPerson(personName) instanceof Adult) {
                 System.out.println("Specify relationship type(partner/friend): ");
@@ -374,14 +378,14 @@ public class Community {
             String firstName, secondName;
             do {
                 System.out.println("Input first person's name:");
-                firstName = sc.next();
+                firstName = sc.nextLine();
                 if (findPerson(firstName) == null) {
                     System.out.println("Cannot find first person, please try again.");
                 }
                 }while(findPerson(firstName) == null);
              do{
                 System.out.println("Input second person's name:");
-                secondName = sc.next();
+                secondName = sc.nextLine();
                 if (findPerson(secondName) == null) {
                     System.out.println("Cannot find second person, please try again.");
                 }
@@ -411,7 +415,7 @@ public class Community {
             do {
                 listEveryone();
                 System.out.println("Input name you want to delete:");
-                deleteName = sc.next();
+                deleteName = sc.nextLine();
                 deletePerson = findPerson(deleteName);
                 if (deletePerson == null) {
                     System.out.println("Cannot find " + deleteName + ", please try again:");
@@ -467,7 +471,7 @@ public class Community {
 
     private void addToCommunity() {
         System.out.println("Input Name:");
-        String name = sc.next();
+        String name = sc.nextLine();
         if(findPerson(name) != null){
             System.out.println("! " + name + " is Already In Community !");
             System.out.println("! Add To Community Not Successful !");
@@ -475,13 +479,13 @@ public class Community {
         }
         int age = ageValid();
         System.out.println("Input gender:");
-        String gender = sc.next();
+        String gender = sc.nextLine();
         System.out.println("Do you wish to set up status now? (y/n)");
         String choice = yesNoValid();
         String status = "Not available";
         if (choice.equals("y")) {
             System.out.println("Input status:");
-            status = sc.next();
+            status = sc.nextLine();
         } else if (choice.equals("n")) {
             status = "Not available";
         }
@@ -498,9 +502,9 @@ public class Community {
                 Adult adult1, adult2;
                 do {
                     System.out.println("Input one parent's name: ");
-                    String parent1 = sc.next();
+                    String parent1 = sc.nextLine();
                     System.out.println("input the other parent's name: ");
-                    String parent2 = sc.next();
+                    String parent2 = sc.nextLine();
                     adult1 = ((Adult) findPerson(parent1));
                     adult2 = ((Adult) findPerson(parent2));
                     if(adult1 == null || adult2 == null){
@@ -550,7 +554,7 @@ public class Community {
         System.out.println("!NOTE: Cannot Add Partner Relationship With Other Person Who Has a Partner!");
         System.out.println("Input another person's name to modify existing relationship:");
         printModifiedRelation(adult);
-        String anotherName = sc.next();
+        String anotherName = sc.nextLine();
         Person anotherPerson = findPerson(anotherName);
         if (anotherPerson != null && adult.withRelationship(anotherPerson)){
             if (anotherPerson instanceof Adult) {
@@ -590,7 +594,7 @@ public class Community {
         System.out.println("!Cannot add partner relationship with other person!");
         System.out.println("Input another person's name to modify existing relationship:");
         printModifiedRelation(adult);
-        String anotherName = sc.next();
+        String anotherName = sc.nextLine();
         Person anotherPerson = findPerson(anotherName);
         if (anotherPerson != null && adult.withRelationship(anotherPerson)) {
             if (anotherPerson instanceof Adult) {
@@ -644,7 +648,7 @@ public class Community {
     private String partnerOrFriend(){
         String s;
         do{
-            s = sc.next();
+            s = sc.nextLine();
             if(!s.equals("partner") && !s.equals("friend")){
                 System.out.println("! Wrong Relationship,  An Adult Can Only Be Partner or Friend With Another Adult !");
                 System.out.println("! Input 'partner' Or 'friend' !");
@@ -689,6 +693,7 @@ public class Community {
             if(age < 0){
                 System.out.println("Invalid Input. Age can only be positive number.");
             }
+            sc.nextLine();
         }while(age < 0);
         return age;
     }
@@ -706,7 +711,7 @@ public class Community {
     private String yesNoValid(){
         String s;
         do{
-            s = sc.next();
+            s = sc.nextLine();
             if(!s.equals("y") && !s.equals("n")){
                 System.out.println("Invalid input. Input 'y' for yes or 'n' for no");
             }
