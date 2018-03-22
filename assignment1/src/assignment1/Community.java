@@ -1,35 +1,84 @@
 package assignment1;
 
-
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * works as a social network where user interactions are realized
+ *
+ *
+ * This class is the driver class where data from other classes is used to realize functions
+ * Two types of people will be stored in community(personList): Adults and Children
+ * Relationship between Adults can be either "friend" or "partner"
+ * Relationship between Children can only be "friend". Besides, age gap constraints apply.
+ * No single parent or no child without any two parents is allowed
+ *
+ *
+ * @author Xiaotian Lu
+ * @studentNo. s3664804
+ * @version 1.8
+ * @since 1.0
+ */
+
 public class Community {
+
+    /**
+     * Person type ArrayList to store "qualified" people in community
+     */
     private ArrayList<Person> personList = new ArrayList<>();
     private Scanner sc = new Scanner(System.in);
 
-    public ArrayList<Person> getPersonList() {
-        return personList;
-    }
-//
-//    private void printInstruction(){
-//        System.out.println("");
-//    }
+    /**
+     * initial data of different types of people for user's ease of use
+     * two children "Lily" and "Luke" were set as dependent of Jake & Lucy and Mike & Jay respectively
+     */
+    public void initialPeople(){
+        Person jake = new Adult("Jake", 19, "female","studying" ,false);
+        Person lucy = new Adult("Lucy", 20, "unknown", "working", false);
+        Person mike = new Adult("Mike", 19, "unknown", "unemployed", false);
+        Person jay = new Adult("Jay", 22, "male","working", true);
+        Person gloria = new Adult("Gloria", 19, "female","unhappy", true);
+        Person mitch = new Adult("Mitch", 19, "female", "happy", false);
+        Person cam = new Adult("Cam", 19, "female", "boring", true);
 
+        Person lily = new Dependent("Lily", 13, "female", "annoying", false);
+        Person luke = new Dependent("Luke", 9, "male", "driving", true);
+
+        personList.add(jake);
+        personList.add(lucy);
+        personList.add(mike);
+        personList.add(jay);
+        personList.add(gloria);
+        personList.add(mitch);
+        personList.add(cam);
+        personList.add(lily);
+        personList.add(luke);
+
+        ((Adult) jake).addDependent((Adult) lucy, (Dependent) lily);
+        ((Adult) lucy).addDependent((Adult) jake, (Dependent) lily);//Lily is successfully added as dependent of Jake & Lucy
+                                                                    //Lucy & Jake automatically become partner and both parents of Lily
+        ((Adult) mike).addDependent((Adult) jay, (Dependent) luke);
+        ((Adult) jay).addDependent((Adult) mike, (Dependent) luke);//Luke is successfully added as dependent of Mike & Jay
+                                                                   //Mike & Jay automatically become partner and both parents of Luke
+    }
+
+    /**
+     * to print menu, ask user to input and direct to corresponding method based on user input.
+     */
     public void printMenu() {
         boolean flag = false;
         while (!flag) {
-            System.out.println("====================================\n"+
-                               "           MiniNet Menu\n" +
-                               "------------------------------------\n" +
-                               "1  ->  List Everyone\n" +
-                               "2  ->  Select a person\n" +
-                               "3  ->  Add new person\n" +
-                               "4  ->  Remove Existing Person\n" +
-                               "5  ->  Are these two direct friends?\n" +
-                               "0  ->  Exist MiniNet\n" +
-                               "====================================\n" +
+            System.out.println("========================================\n"+
+                               "|              MiniNet Menu            |\n" +
+                               "----------------------------------------\n" +
+                               "| 1  ->  List Everyone                 |\n" +
+                               "| 2  ->  Select a person               |\n" +
+                               "| 3  ->  Add new person                |\n" +
+                               "| 4  ->  Remove Existing Person        |\n" +
+                               "| 5  ->  Are these two direct friends? |\n" +
+                               "| 0  ->  Exist MiniNet                 |\n" +
+                               "========================================\n" +
                                "Input number of function: ");
             String choice = sc.next();
             switch (choice) {
@@ -57,23 +106,39 @@ public class Community {
         }
     }
 
+    /**
+     * to list everyone's name within community
+     */
     private void listEveryone() {
-        System.out.println("=============================");
-        System.out.println("|Listing People in Community|");
-        System.out.println("-----------------------------");
+        System.out.println("==========================================");
+        System.out.println("|       Listing People in Community      |");
+        System.out.println("------------------------------------------");
         if (personList.size() == 0) {
-            System.out.println("|                           |");
-            System.out.println("|There's no one in community|");
-            System.out.println("|                           |");
-            System.out.println("=============================");
+            System.out.println("|                                        |");
+            System.out.println("|       There's no one in community      |");
+            System.out.println("|                                        |");
+            System.out.println("==========================================");
             return;
         }
+        String personType;
         for (int i = 0; i < personList.size(); i++) {
-            System.out.println((i + 1) + ": " + personList.get(i).getName());
+            if(personList.get(i) instanceof Adult){
+                personType = "Adult";
+            }else{
+                personType = "Dependent";
+            }
+
+            System.out.print((i + 1) + ":Name -> ");
+            System.out.printf("%-10s|", personList.get(i).getName());
+            System.out.println("    Type -> " + personType);
         }
-        System.out.println("=============================");
+        System.out.println("==========================================");
     }
 
+    /**
+     * present a submenu when a person was selected
+     * @param person to pass in a person to manipulate this person
+     */
     private void updateSelected(Person person) {
         if (person == null) {
             System.out.println("|Try to add a person first  |");
@@ -119,14 +184,22 @@ public class Community {
                 }
             } while (!flag);
         }
-    }//updated!!!!
+    }
 
+    /**
+     *
+     * @param person pass in person and change his name
+     */
     private void updateName(Person person) {
         System.out.println("Input new name:");
         person.setName(sc.next());
         System.out.println("Name update successful!");
     }
 
+    /**
+     * user is not allowed to change a child to adult and vise versa
+     * @param person pass in person and change his age
+     */
     private void updateAge(Person person) {
         int newAge = ageValid();
         if (person.getAge() < 16 && newAge >= 16) {
@@ -141,25 +214,33 @@ public class Community {
         }
     }
 
-
+    /**
+     * @param person pass in person and change his gender
+     */
     private void updateGender(Person person) {
         System.out.println("Input New Gender:");
         person.setGender(sc.next());
         System.out.println("Gender Update Successful");
     }
 
+    /**
+     * @param person pass in person and change his status
+     */
     private void updateStatus(Person person) {
         System.out.println("Input New Status:");
         person.setStatus(sc.next());
         System.out.println("Status Update Successful");
     }
 
+    /**
+     * @param person pass in person and switch on/off his image display
+     */
     private void switchOnOffImage(Person person){
         System.out.println("Image is currently " + (person.getImage()?"switched on":"switched off"));
         System.out.println("Do you want to " + (person.getImage()?"switch it off":"switch it on") + " ?(y/n)");
         String s = yesNoValid();
         if(s.equals("y")){
-            if (person.getImage() == true){
+            if (person.getImage()){
                 person.setImage(false);
             }else{
                 person.setImage(true);
@@ -171,6 +252,9 @@ public class Community {
 
     }
 
+    /**
+     * @return person based on user input
+     */
     private Person selectPerson() {
         listEveryone();
         if (personList.size() != 0) {
@@ -219,7 +303,6 @@ public class Community {
             String personName = sc.next();
             if (findPerson(personName) != null && !findPerson(personName).equals(dependent)) {
                 dependent.addRelationship("friend", findPerson(personName));
-                System.out.println(dependent.getName() + " is now friend of " + personName);
             } else {
                 System.out.println("! Cannot Find " + personName + " or User Trying To Add Self-Relationship !");
             }
@@ -232,7 +315,9 @@ public class Community {
             int counter = 1;
             for (int i = 0; i < personList.size(); i++) {
                 if (!personList.get(i).getName().equals(adult.getName())) {
-                    System.out.println(counter + ": " + personList.get(i).getName() + "  |  Age: " + personList.get(i).getAge());
+                    System.out.print(counter + ": ");
+                    System.out.printf("%-10s|", personList.get(i).getName());
+                    System.out.println("  Age: " + personList.get(i).getAge());
                     counter++;
                 }
             }
@@ -380,7 +465,6 @@ public class Community {
     }
 
 
-//updated!!!//yes or no validation not complete//
     private void addToCommunity() {
         System.out.println("Input Name:");
         String name = sc.next();
@@ -442,8 +526,6 @@ public class Community {
         }
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////done
-
     private void modifyRelationship(Person person) {
         if(person.getRelationship().size() == 0){
             System.out.println("No other related people to modify, add a relationship first!");
@@ -461,6 +543,8 @@ public class Community {
             }
         }
     }
+
+
 
     private void modifySingleRelation(Adult adult){
         System.out.println("!NOTE: Cannot Add Partner Relationship With Other Person Who Has a Partner!");
@@ -640,6 +724,4 @@ public class Community {
         }
         System.out.println("----------------------------------------");
     }
-
-
 }
