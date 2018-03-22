@@ -1,3 +1,6 @@
+package assignment1;
+
+
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
