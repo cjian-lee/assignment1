@@ -3,7 +3,13 @@ package assignment1;
 public class MiniNet {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		Community community1 = new Community();
+
+        community1.initialPeople();
+
+
+        community1.printMenu();
+
 
 	}
 
