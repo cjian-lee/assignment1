@@ -2,8 +2,6 @@ package assignment1;
 
 //author Chern Jian Lee
 
-
-
 public class Adult extends Person{
     private boolean hasDependent = false;
 
