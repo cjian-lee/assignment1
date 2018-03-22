@@ -1,15 +1,15 @@
 package assignment1;
 import java.util.ArrayList;
 
-//authour Chern Jian Lee
-
+//author Chern Jian Lee
 
 public abstract class Person {
 
     private String name;
     private int age;
     private String gender;
-    private String status = "Not Available";
+    private String status;
+    private boolean image;
     private ArrayList<Relationship> relationship = new ArrayList<>();
 
 
@@ -19,11 +19,12 @@ public abstract class Person {
         this.age = age;
         this.gender = gender;
     }
-    public Person(String name, int age, String gender, String status) {
+    public Person(String name, int age, String gender, String status, boolean image) {
         this.name = name;
         this.age = age;
         this.gender = gender;
         this.status = status;
+        this.image = image;
     }
 
 
@@ -49,13 +50,11 @@ public abstract class Person {
         return relationship;
     }
 
-    public void display_Details() {
-        System.out.println(this.name);
-        System.out.println(this.age);
-        System.out.println(this.gender);
-        System.out.println(this.status);
-
+    public boolean getImage(){
+        return image;
     }
+
+
 
     //setters
     public void setName(String name) {
@@ -73,12 +72,18 @@ public abstract class Person {
     public void setStatus(String status) {
         this.status = status;
     }
+    public void setImage(boolean image){
+        this.image = image;
+    }
 
 
     //to remove "this person" from his related person's relationship list
     public void removeRelated(){
         for(int i = 0; i < getRelationship().size(); i++){
             int removedIndex = getRelationship().get(i).getPerson().relatedIndex(this);
+            if(relationship.get(i).getType().equals("partner")){
+                ((Adult) relationship.get(i).getPerson()).setPartner(null);
+            }
             getRelationship().get(i).getPerson().getRelationship().remove(removedIndex);
         }
     }
@@ -99,16 +104,6 @@ public abstract class Person {
         }return -1;
     }
 
-//    public void printRelationship(){
-//        if(hasRelationship()) {
-//            for (int i = 0; i < relationship.size(); i++) {
-//                Person relatedPerson = relationship.get(i).getPerson();
-//                System.out.println(getName() + " and " + relatedPerson.getName() + " are " + relationship.get(i).getType());
-//            }
-//        }else{
-//            System.out.println(getName() + " currently has no relationship");
-//        }
-//    }
 
     public boolean hasRelationship(){
         if(relationship.size() > 0){

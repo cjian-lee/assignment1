@@ -3,6 +3,7 @@ package assignment1;
 
 //author Chern Jian Lee
 
+
 public class Relationship {
 
     private String type;
@@ -30,6 +31,10 @@ public class Relationship {
         this.type = type;
     }
 
+    //    public void addFriend() {
+//    	list.add(person);
+//    }
+//
 
 
 }
