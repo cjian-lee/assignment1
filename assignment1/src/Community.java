@@ -85,7 +85,7 @@ public class Community {
                                "| 3  ->  Add new person                |\n" +
                                "| 4  ->  Remove Existing Person        |\n" +
                                "| 5  ->  Are these two direct friends? |\n" +
-                               "| 0  ->  Exist MiniNet                 |\n" +
+                               "| 0  ->  Exit MiniNet                 |\n" +
                                "========================================\n" +
                                "Input number of function: ");
             String choice = sc.nextLine();
@@ -149,8 +149,7 @@ public class Community {
      */
     private void updateSelected(Person person) {
         if (person == null) {
-            System.out.println("|          Try to add a person first          |");
-            System.out.println("===============================================");
+            return;
         } else {
             boolean flag = false;
             do {
@@ -199,10 +198,28 @@ public class Community {
      * @param person pass in person and change his name
      */
     private void updateName(Person person) {
-        System.out.println("Input new name:");
-        String newName = sc.nextLine();
+        String newName;
+        boolean isValid;
+        do {
+            isValid = true;
+            System.out.println("Input new name : ");
+            newName = sc.nextLine().trim();
+            for(int i=0; i<personList.size();i++) {
+                if(personList.get(i).getName().equals(newName)) {
+                    isValid = false;
+                }
+            }
+            if(newName.isEmpty()){
+                System.out.println("! Cannot Have Empty Name !" );
+            }
+            if(!isValid){
+                System.out.println("! The Name of " + newName + " Has Already Been Used !");
+            }
+        } while(newName.isEmpty() || !isValid);
         person.setName(newName);
-        System.out.println("Name update successful!");
+        System.out.println("Name Update Successful");
+
+
     }
 
     /**
@@ -267,7 +284,7 @@ public class Community {
     private Person selectPerson() {
         listEveryone();
         if (personList.size() != 0) {
-            System.out.println("Input Person's Name For Further Manipulation:");
+            System.out.println("Input Person's Name For Further Manipulation (input '/' to return):");
             boolean flag = false;
             while (!flag) {
                 String personName = sc.nextLine();
@@ -277,10 +294,16 @@ public class Community {
                         return personList.get(i);
                     }
                 }
-                System.out.println("! Cannot Find " + personName + ". Please Try Again !");
+                if(personName.equals("/")){
+                    System.out.println("RETURNING TO MAIN MENU.....");
+                    return null;
+                }
+                System.out.println("! Cannot Find " + personName + ". Please Try Again (input '/' to return) !");
                 listEveryone();
             }
         }
+        System.out.println("|          Try to add a person first          |");
+        System.out.println("===============================================");
         return null;
     }
 
@@ -826,13 +849,13 @@ public class Community {
             System.out.println("Input age:");
             try {
                 age = sc.nextInt();
+                sc.nextLine();
             }catch(InputMismatchException e){
                 sc.nextLine();
             }
             if(age < 0){
                 System.out.println("Invalid Input. Age can only be positive number.");
             }
-            sc.nextLine();
         }while(age < 0);
         return age;
     }
