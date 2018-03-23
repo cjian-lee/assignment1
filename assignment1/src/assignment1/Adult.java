@@ -38,7 +38,7 @@ public class Adult extends Person{
         this.dependent = dependent;
     }
 
-
+//Add dependent checking if the Adult has another partner, or has to set a partner first. 
     public void addDependent(Adult adult, Dependent dependent){
         if(withRelationship(adult)){
             int findIndex = relatedIndex(adult);
@@ -53,7 +53,7 @@ public class Adult extends Person{
         this.dependent = dependent;
     }
 
-
+//Method to add relationship, while checking if Person is already in a relationship
     public void addRelationship(String type, Adult adult){
         if(withRelationship(adult)){
             System.out.println(getName() + " is already in relationship with " + adult.getName());

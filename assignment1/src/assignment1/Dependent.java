@@ -8,6 +8,7 @@ public class Dependent extends Person{
         super(name, age, gender, status, image);
     }
 
+    //Dependent adding relationships or friends with the maximum 3 year gap constraint
     public void addRelationship(String type, Person person){
         if (withinRange(person)){
             if(withRelationship(person)){
