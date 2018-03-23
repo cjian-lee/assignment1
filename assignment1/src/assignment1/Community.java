@@ -278,7 +278,8 @@ public class Community {
 
     /**
      * to add relationship to an adult or child
-     * @param person
+     * @param person pass in super class reference and judge if the reference is point to an adult
+     *               or child using instanceof and do corresponding casting
      */
     private void addRelationship(Person person) {
         if (personList.size() == 1) {
@@ -292,27 +293,43 @@ public class Community {
         }
     }
 
+    /**
+     * Children who are 2 or under 2 years old cannot have any friends.
+     * Children who are 2 or under 2 years old have dependent/parent relationship established once they
+     *    were added to community.
+     * Children who are above 2 years old can have "friend" relationship under certain constraints.
+     * @param dependent
+     */
     private void addChildrenRelation(Dependent dependent) {
         if (dependent.getAge() <= 2) {
             System.out.println("Children who is 2 or under 2 years old cannot have any friend");
         } else {
             System.out.println("People in community to have relationship with: ");
             int counter = 1;
-            for (int i = 0; i < personList.size(); i++) {
+            for (int i = 0; i < personList.size(); i++) {    // to print out people in community except himself
                 if (!personList.get(i).getName().equals(dependent.getName())) {
-                    System.out.println(counter + ": " + personList.get(i).getName() + "  |  Age: " + personList.get(i).getAge());
+                    System.out.print(counter + ": ");
+                    System.out.printf("%-15s|", personList.get(i).getName());
+                    System.out.println("  Age: " + personList.get(i).getAge());
+                    counter++;
+
                 }
             }
             System.out.println("Input person's name to establish a friendship with:");
             String personName = sc.nextLine();
-            if (findPerson(personName) != null && !findPerson(personName).equals(dependent)) {
+            if (findPerson(personName) != null && !findPerson(personName).equals(dependent)) { // cannot have self-associated relationship
                 dependent.addRelationship("friend", findPerson(personName));
             } else {
                 System.out.println("! Cannot Find " + personName + " or User Trying To Add Self-Relationship !");
             }
         }
     }
-//add relationship with yourself bug fixed
+
+    /**
+     * To add new relationship to an adult.
+     * adult who is already someone's partner cannot add or be added new "partner" relationship     *
+     * @param adult
+     */
     private void addAdultRelation(Adult adult) {
         String personName;
             System.out.println("People in community to have relationship with: ");
@@ -320,7 +337,7 @@ public class Community {
             for (int i = 0; i < personList.size(); i++) {
                 if (!personList.get(i).getName().equals(adult.getName())) {
                     System.out.print(counter + ": ");
-                    System.out.printf("%-10s|", personList.get(i).getName());
+                    System.out.printf("%-15s|", personList.get(i).getName());
                     System.out.println("  Age: " + personList.get(i).getAge());
                     counter++;
                 }
@@ -359,9 +376,11 @@ public class Community {
         }
     }
 
-//07:58/2018
 
-
+    /**
+     * checking if 2 people have direction relationship
+     * not allowed to check if there's nobody or only one in community
+     */
     private void directFriend() {
         if (personList.size() == 0) {
             System.out.println("=============================");
@@ -372,20 +391,29 @@ public class Community {
             System.out.println("=============================");
             System.out.println("|Only one person in community|");
             System.out.println("|Try to add another first    |");
-            System.out.println("=============================");
+            System.out.println("==============================");
         } else {
             listEveryone();
             String firstName, secondName;
             do {
-                System.out.println("Input first person's name:");
+                System.out.println("Input first person's name (input '/' to return):");
                 firstName = sc.nextLine();
+                if (firstName.equals("/")){
+                    System.out.println("Returning to Main Menu....");
+                    return;
+                }
                 if (findPerson(firstName) == null) {
+
                     System.out.println("Cannot find first person, please try again.");
                 }
                 }while(findPerson(firstName) == null);
              do{
-                System.out.println("Input second person's name:");
+                System.out.println("Input second person's name (input '/' to return):");
                 secondName = sc.nextLine();
+                 if (secondName.equals("/")){
+                     System.out.println("Returning to Main Menu....");
+                     return;
+                 }
                 if (findPerson(secondName) == null) {
                     System.out.println("Cannot find second person, please try again.");
                 }
@@ -402,7 +430,10 @@ public class Community {
     }
 
 
-
+    /**
+     * to remove existing person from community
+     * not allowed to remove if there's no one in community
+     */
     private void removePerson() {
         String deleteName;
         Person deletePerson;
@@ -414,9 +445,13 @@ public class Community {
         } else {
             do {
                 listEveryone();
-                System.out.println("Input name you want to delete:");
+                System.out.println("Input name you want to delete (input '/' to return):");
                 deleteName = sc.nextLine();
                 deletePerson = findPerson(deleteName);
+                if(deleteName.equals("/")){
+                    System.out.println("Returning to Main Menu....");
+                    return;
+                }
                 if (deletePerson == null) {
                     System.out.println("Cannot find " + deleteName + ", please try again:");
                 }
@@ -429,6 +464,12 @@ public class Community {
         }
     }
 
+    /**
+     * to delete an adult from community
+     * delete adult who has a dependent will lead to deletion of both if user confirm it
+     *      and his partner will be available for a new partner relationship
+     * @param deletePerson
+     */
     private void deleteAdult(Person deletePerson) {
         if (!((Adult) deletePerson).getHasDependent()) {
             deletePerson.removeRelated();
@@ -457,6 +498,12 @@ public class Community {
         }
     }
 
+    /**
+     * to delete a dependent from community
+     * delete a dependent will not delete his parents. after deletion, his parent will still be in "partner"
+     *      relationship, but they will become available parents for a new dependent.
+     * @param deletePerson
+     */
     private void deleteDependent(Person deletePerson) {
         for (int i = 0; i < deletePerson.getRelationship().size(); i++) {
             if (deletePerson.getRelationship().get(i).getType().equals("dependent")) {
@@ -468,20 +515,27 @@ public class Community {
         System.out.println(deletePerson.getName() + " was deleted.");
     }
 
-
+    /**
+     * to add a person into community and create his own profile
+     * status is optional: either input by user or "Not Available" by default
+     * image is optional: either to switch on or off
+     * adding adult will not affect other people in community
+     * adding dependent will force user to assign two parents for the new dependent
+     * adding dependent will not be successful if there's not enough (at least 2) parents currently in community
+     */
     private void addToCommunity() {
         System.out.println("Input Name:");
         String name = sc.nextLine();
-        if(findPerson(name) != null){
-            System.out.println("! " + name + " is Already In Community !");
-            System.out.println("! Add To Community Not Successful !");
+        if(findPerson(name) != null){                   // checking name to see if input name has already been in community
+            System.out.println("! " + name + " is Already In Community !"); // if not, proceed to next step
+            System.out.println("! Add To Community Not Successful !");      // if so, return
             return;
         }
-        int age = ageValid();
+        int age = ageValid();        //to valid input age
         System.out.println("Input gender:");
         String gender = sc.nextLine();
         System.out.println("Do you wish to set up status now? (y/n)");
-        String choice = yesNoValid();
+        String choice = yesNoValid();   // to force user to input either "y" for yes or "n" for no
         String status = "Not available";
         if (choice.equals("y")) {
             System.out.println("Input status:");
@@ -490,37 +544,20 @@ public class Community {
             status = "Not available";
         }
         System.out.println("Do you wish to display profile image now? (y/n)");
-        boolean image = displayImage();
-        if (age >= 16) {
+        boolean image = displayImage();    // false: switch off| true: switch on
+        if (age >= 16) {                    // adult can be added to community directly
             personList.add(addToAdult(name, age, gender, status, image));
             System.out.println(name + " added to the community.");
-        } else {
-            if (getAvailParent() < 2) {
+        } else {                            // adding dependents will force user to assign 2 parents first
+            if (getAvailParent() < 2) {     // failed to add a dependent if there's not enough parents
                 System.out.println("Cannot add " + name + ". Not enough adults available.");
             } else {
-                listAvailParent();
-                Adult adult1, adult2;
-                do {
-                    System.out.println("Input one parent's name: ");
-                    String parent1 = sc.nextLine();
-                    System.out.println("input the other parent's name: ");
-                    String parent2 = sc.nextLine();
-                    adult1 = ((Adult) findPerson(parent1));
-                    adult2 = ((Adult) findPerson(parent2));
-                    if(adult1 == null || adult2 == null){
-                        System.out.println("! Invalid Input. Please Input Names Of Following Available Adults !");
-                        listAvailParent();
-                    }
-                }while(adult1 == null || adult2 == null);
-                Person newDependent = new Dependent(name, age, gender, status, image);
-                adult1.addDependent(adult2, ((Dependent) newDependent));
-                adult2.addDependent(adult1, ((Dependent) newDependent));
-                personList.add(newDependent);
-                System.out.println(name + " added. " + adult1.getName() + " and " + adult2.getName() + " are now parents of " + name + ".");
+                addTwoParents(name, age, gender, status, image);
             }
         }
     }
 
+    // to return boolean value according to user input
     private boolean displayImage(){
         String s = yesNoValid();
         if(s.equals("y")){
@@ -530,8 +567,93 @@ public class Community {
         }
     }
 
+    /**
+     * to add two qualified parents to a newly added dependent
+     * 2 parents can be in "partner" relationship but each of them must have no dependent
+     * if either parents has "partner" relationship with someone else but has no dependent,
+     *      remove "partner" relationship with existing partner and establish a new "partner"
+     *      relationship with new partner according to user input
+     * @param name
+     * @param age
+     * @param gender
+     * @param status
+     * @param image
+     */
+    private void addTwoParents(String name, int age, String gender, String status, boolean image){
+        System.out.println("Choose 2 of the following people as parents: ");
+        listAvailParent();
+        Adult adult1, adult2;
+        do {
+            System.out.println("Input one parent's name: ");
+            String parent1 = sc.nextLine();
+            System.out.println("input the other parent's name: ");
+            String parent2 = sc.nextLine();
+            adult1 = ((Adult) findPerson(parent1));
+            adult2 = ((Adult) findPerson(parent2));
+            if(adult1 == null || adult2 == null){
+                System.out.println("! Invalid Input. Please Input Names Of Following Available Adults !");
+                listAvailParent();
+            }
+        }while(adult1 == null || adult2 == null);  //user input has to be valid
+        if(adult1.getHasDependent() || adult2.getHasDependent()){    //cannot choose people who already have dependent
+            if(adult1.getHasDependent()) {
+                System.out.println("! " + adult1.getName() + " Has Already Had a Dependent !\n" +
+                        "! Failed to Add !");
+            }
+            if(adult2.getHasDependent()){
+                System.out.println("! " + adult2.getName() + " Has Already Had a Dependent !\n" +
+                        "! Failed to Add !");
+            }
+        }else {
+            if(adult1.getPartner() != null || adult2.getPartner() != null){ // if person has already been in a partner
+                if(adult1.getPartner() != null){                            // relationship, remove existing one and
+                    if(breakUp(adult1).equals("n")){                  // add new one
+                        return;
+                    }
+                }
+                if(adult2.getPartner() != null){
+                    if(breakUp(adult2).equals("n")){
+                        return;
+                    }
+
+                }
+            }
+            Person newDependent = new Dependent(name, age, gender, status, image);
+            adult1.addDependent(adult2, ((Dependent) newDependent));
+            adult2.addDependent(adult1, ((Dependent) newDependent));
+            personList.add(newDependent);
+            System.out.println(name + " added. " + adult1.getName() + " and " + adult2.getName() + " are now parents of " + name + ".");
+        }
+    }
+
+
+    /**
+     * to remove existing "partner" relationship and add a new "partner" relationship with someone else
+     * @param adult
+     * @return
+     */
+    private String breakUp(Adult adult){
+        System.out.println(adult.getName() + " is currently partner of " + adult.getPartner().getName() + "\n" +
+                           "Do you with to change partner? (y/n)");
+        String choice = yesNoValid();
+        if(choice.equals("n")){
+            System.out.println("! Fail to Add !\n" +
+                               "! User Choose Not to Change Current Partner !");
+        }else{
+            adult.removeRelatedPartner();
+        }
+        return choice;
+    }
+
+
+
+    /**
+     * to modify a person's relationship with another person: change from "partner" to "friend" or "friend" to partner
+     * @param person
+     */
+
     private void modifyRelationship(Person person) {
-        if(person.getRelationship().size() == 0){
+        if(person.getRelationship().size() == 0){ // cannot modify relationship if there's no existing relationship
             System.out.println("No other related people to modify, add a relationship first!");
         }else {
             if (person instanceof Adult) {
@@ -548,7 +670,11 @@ public class Community {
         }
     }
 
-
+    /**
+     * a single adult(has no partner) can have "friend" relationship with anyone
+     * a single adult cannot have "partner" relationship with someone who has a partner
+     * @param adult
+     */
 
     private void modifySingleRelation(Adult adult){
         System.out.println("!NOTE: Cannot Add Partner Relationship With Other Person Who Has a Partner!");
@@ -589,6 +715,11 @@ public class Community {
         }
     }
 
+    /**
+     * a has-partner adult can have "friend" relationship and cannot have any "partner" relationship with anyone else
+     * a pair of couple can be modified to "friend" only when their dependent was deleted.
+     * @param adult
+     */
     private void modifyHasPartnerRelation(Adult adult) {
         System.out.println("!NOTE: " + adult.getName() + " is partner of " + adult.getPartner().getName() + "!");
         System.out.println("!Cannot add partner relationship with other person!");
@@ -640,11 +771,7 @@ public class Community {
         }
     }
 
-
-
-
-
-
+    //validation when user inputting relationship type(friend/partner)
     private String partnerOrFriend(){
         String s;
         do{
@@ -657,7 +784,7 @@ public class Community {
         return s;
     }
 
-
+    // to print out currently available parents who have no dependent in community
     private void listAvailParent(){
         int counter = 0;
         for(int i = 0; i < personList.size(); i++){
@@ -667,6 +794,8 @@ public class Community {
             }
         }
     }
+
+    // to return number of available parents who have no dependent in community
     private int getAvailParent(){
         int counter = 0;
         for(int i = 0; i < personList.size(); i++){
@@ -677,10 +806,12 @@ public class Community {
         return counter;
     }
 
+    // add an Adult object by calling class Adult constructor
     private Person addToAdult(String name, int age, String gender, String status, boolean image){
         return new Adult(name, age, gender, status, image);
     }
 
+    // to valid user inputting age
     private int ageValid(){
         int age = -1;
         do{
@@ -708,6 +839,7 @@ public class Community {
         return null;
     }
 
+    // to valid user inputting "y" or "n"
     private String yesNoValid(){
         String s;
         do{
@@ -719,6 +851,7 @@ public class Community {
         return s;
     }
 
+    // to print out a people that has relationship with a person to be modified
     private void printModifiedRelation(Adult adult){
         System.out.println("----------------------------------------");
         for(int i = 0; i < adult.getRelationship().size(); i++){
