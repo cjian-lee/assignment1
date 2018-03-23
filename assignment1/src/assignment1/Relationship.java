@@ -14,10 +14,6 @@ public class Relationship {
         this.person = person;
     }
 
-    public Relationship(Person person) {
-        this.person = person;
-    }
-
     public String getType() {
         return type;
     }
@@ -29,11 +25,6 @@ public class Relationship {
     public void setType(String type) {
         this.type = type;
     }
-
-    //    public void addFriend() {
-//    	list.add(person);
-//    }
-//
 
 
 }

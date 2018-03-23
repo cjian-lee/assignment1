@@ -2,6 +2,8 @@ package assignment1;
 
 //author Chern Jian Lee
 
+
+
 public class Adult extends Person{
     private boolean hasDependent = false;
 
@@ -38,7 +40,7 @@ public class Adult extends Person{
         this.dependent = dependent;
     }
 
-//Add dependent checking if the Adult has another partner, or has to set a partner first. 
+
     public void addDependent(Adult adult, Dependent dependent){
         if(withRelationship(adult)){
             int findIndex = relatedIndex(adult);
@@ -53,7 +55,7 @@ public class Adult extends Person{
         this.dependent = dependent;
     }
 
-//Method to add relationship, while checking if Person is already in a relationship
+
     public void addRelationship(String type, Adult adult){
         if(withRelationship(adult)){
             System.out.println(getName() + " is already in relationship with " + adult.getName());
@@ -64,6 +66,17 @@ public class Adult extends Person{
         }
     }
 
+    public void removeRelatedPartner(){
+        for(int i = 0; i < getRelationship().size(); i++){
+            int removedIndex = getRelationship().get(i).getPerson().relatedIndex(this);
+            if(getRelationship().get(i).getType().equals("partner")){
+                ((Adult) getRelationship().get(i).getPerson()).setPartner(null);
+                this.setPartner(null);
+                getRelationship().get(i).getPerson().getRelationship().remove(removedIndex);
+                getRelationship().remove(i);
+            }
+        }
+    }
 
     @Override
     public void printProfile() {

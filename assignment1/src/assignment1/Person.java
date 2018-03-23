@@ -12,13 +12,6 @@ public abstract class Person {
     private boolean image;
     private ArrayList<Relationship> relationship = new ArrayList<>();
 
-
-    //constructors to choose whether to reset status
-    public Person(String name, int age, String gender) {
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-    }
     public Person(String name, int age, String gender, String status, boolean image) {
         this.name = name;
         this.age = age;
@@ -129,8 +122,13 @@ public abstract class Person {
         }
     }
 
+
+
     //abstract class to be overridden in subclasses
     public abstract void printProfile();
 
 
+
+
 }
+
