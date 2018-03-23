@@ -29,16 +29,18 @@ public class Community {
     private ArrayList<Person> personList = new ArrayList<>();
     private Scanner sc = new Scanner(System.in);
 
-    /**
-     * initial data of different types of people for user's ease of use
-     * two children "Lily" and "Luke" were set as dependent of Jake & Lucy and Mike & Jay respectively
-     */
+
     
     public void establishCommunity() {
     	initialPeople();
     	printMenu();
     	
     }
+    
+    /**
+     * initial data of different types of people for user's ease of use
+     * two children "Lily" and "Luke" were set as dependent of Jake & Lucy and Mike & Jay respectively
+     */
     private void initialPeople(){
         Person jake = new Adult("Jake", 19, "female","studying" ,false);
         Person lucy = new Adult("Lucy", 20, "unknown", "working", false);
