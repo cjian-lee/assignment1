@@ -1,2 +1,4 @@
 /.metadata/
 /.recommenders/
+out
+.DS_Store
