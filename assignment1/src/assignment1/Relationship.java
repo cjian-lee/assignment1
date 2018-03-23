@@ -1,10 +1,22 @@
 package assignment1;
 
 
-//author Chern Jian Lee
+/**
+ * 
+ * to store different types of relationship
+ *
+ * @author Chern Jian Lee
+ * @studentNo. s3373345
+ * @version 1.8
+ * @since 1.0
+ */
 
 public class Relationship {
 
+	/**
+	 * instance variables that indicates the type of a relationship
+	 * and the person who has the relationship with
+	 */
     private String type;
     private Person person;
 
@@ -14,14 +26,26 @@ public class Relationship {
         this.person = person;
     }
 
+    /**
+     * to return a type of this relationship
+     * @return
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * to return a person 
+     * @return
+     */
     public Person getPerson() {
         return person;
     }
 
+    /**
+     * setters to change the value of type of a relationship
+     * @param type
+     */
     public void setType(String type) {
         this.type = type;
     }

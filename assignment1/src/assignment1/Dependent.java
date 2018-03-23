@@ -1,13 +1,29 @@
 package assignment1;
 
-
-//author Chern Jian Lee
+/**
+ * 
+ * an inherited class from Person Class 
+ * allow user to add friend relationship between dependents
+ * print out his profiles
+ *
+ *
+ * @author Chern Jian Lee
+ * @studentNo. s3373345
+ * @version 1.8
+ * @since 1.0
+ */
 
 public class Dependent extends Person{
+	
     public Dependent(String name, int age, String gender, String status, boolean image) {
         super(name, age, gender, status, image);
     }
 
+    /**
+     * to add a friend with other dependent
+     * @param type
+     * @param person
+     */
     public void addRelationship(String type, Person person){
         if (withinRange(person)){
             if(withRelationship(person)){
@@ -23,6 +39,11 @@ public class Dependent extends Person{
         }
     }
 
+    /**
+     * to check if the target person is within the age range 
+     * @param person
+     * @return
+     */
     private boolean withinRange(Person person){
         if(person.getAge() > 2 && person.getAge() < 16){
             if(Math.abs(person.getAge()- getAge()) <= 3){

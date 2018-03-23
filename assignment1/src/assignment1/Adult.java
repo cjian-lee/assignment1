@@ -1,21 +1,37 @@
 package assignment1;
 
-//author Chern Jian Lee
 
+/**
+ * 
+ * an inherited class from Person Class 
+ * allow user to add friend and partner relationship between adults
+ * print out his profiles
+ *
+ * @author Chern Jian Lee
+ * @studentNo. s3373345
+ * @version 1.8
+ * @since 1.0
+ */
 
 
 public class Adult extends Person{
     private boolean hasDependent = false;
 
+    /**
+     * to store an adult's partner and his dependent
+     */
     private Adult partner;
     private Dependent dependent;
-
 
 
     public Adult(String name, int age, String gender, String status, boolean image) {
         super(name, age, gender, status, image);
     }
 
+    /**
+     * getters to return instance variables
+     * @return
+     */
     public boolean getHasDependent() {
         return hasDependent;
     }
@@ -28,6 +44,10 @@ public class Adult extends Person{
         return dependent;
     }
 
+    /**
+     * setters to change the value of instance variables
+     * @param hasDependent
+     */
     public void setHasDependent(boolean hasDependent) {
         this.hasDependent = hasDependent;
     }
@@ -41,6 +61,11 @@ public class Adult extends Person{
     }
 
 
+    /**
+     * to add a dependent and a partner at the same time
+     * @param adult
+     * @param dependent
+     */
     public void addDependent(Adult adult, Dependent dependent){
         if(withRelationship(adult)){
             int findIndex = relatedIndex(adult);
@@ -55,7 +80,11 @@ public class Adult extends Person{
         this.dependent = dependent;
     }
 
-
+    /**
+     * to add a friend with another adult
+     * @param type
+     * @param adult
+     */
     public void addRelationship(String type, Adult adult){
         if(withRelationship(adult)){
             System.out.println(getName() + " is already in relationship with " + adult.getName());
@@ -65,7 +94,10 @@ public class Adult extends Person{
             System.out.println(this.getName() + " is now " + type + " of " + adult.getName());
         }
     }
-
+    
+    /**
+     * to remove a "partner" relationship with another person 
+     */
     public void removeRelatedPartner(){
         for(int i = 0; i < getRelationship().size(); i++){
             int removedIndex = getRelationship().get(i).getPerson().relatedIndex(this);
