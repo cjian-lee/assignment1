@@ -33,7 +33,13 @@ public class Community {
      * initial data of different types of people for user's ease of use
      * two children "Lily" and "Luke" were set as dependent of Jake & Lucy and Mike & Jay respectively
      */
-    public void initialPeople(){
+    
+    public void establishCommunity() {
+    	initialPeople();
+    	printMenu();
+    	
+    }
+    private void initialPeople(){
         Person jake = new Adult("Jake", 19, "female","studying" ,false);
         Person lucy = new Adult("Lucy", 20, "unknown", "working", false);
         Person mike = new Adult("Mike", 19, "unknown", "unemployed", false);
@@ -66,7 +72,7 @@ public class Community {
     /**
      * to print menu, ask user to input and direct to corresponding method based on user input.
      */
-    public void printMenu() {
+    private void printMenu() {
         boolean flag = false;
         while (!flag) {
             System.out.println("========================================\n"+
@@ -634,7 +640,7 @@ public class Community {
      */
     private String breakUp(Adult adult){
         System.out.println(adult.getName() + " is currently partner of " + adult.getPartner().getName() + "\n" +
-                           "Do you with to change partner? (y/n)");
+                           "Do you wish to change partner? (y/n)");
         String choice = yesNoValid();
         if(choice.equals("n")){
             System.out.println("! Fail to Add !\n" +
