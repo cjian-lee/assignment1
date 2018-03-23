@@ -555,13 +555,24 @@ public class Community {
      * adding dependent will not be successful if there's not enough (at least 2) parents currently in community
      */
     private void addToCommunity() {
-        System.out.println("Input Name:");
-        String name = sc.nextLine();
-        if(findPerson(name) != null){                   // checking name to see if input name has already been in community
-            System.out.println("! " + name + " is Already In Community !"); // if not, proceed to next step
-            System.out.println("! Add To Community Not Successful !");      // if so, return
-            return;
-        }
+        String name;
+        boolean isValid;
+        do {
+            isValid = true;
+            System.out.println("Input new name : ");
+            name = sc.nextLine().trim();
+            for(int i=0; i<personList.size();i++) {
+                if(personList.get(i).getName().equals(name)) {
+                    isValid = false;
+                }
+            }
+            if(name.isEmpty()){
+                System.out.println("! Cannot Have Empty Name !" );
+            }
+            if(!isValid){
+                System.out.println("! The Name of " + name + " Has Already Been Used !");
+            }
+        } while(name.isEmpty() || !isValid);
         int age = ageValid();        //to valid input age
         System.out.println("Input gender:");
         String gender = sc.nextLine();
